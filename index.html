@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>husenet</title>
+  <meta name="description" content="husenet - public projects." />
+  <meta property="og:title" content="husenet" />
+  <meta property="og:description" content="public projects." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://husenet.github.io" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2266%22 fill=%22%23ffb454%22>&gt;_</text></svg>" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+  <div class="crt" aria-hidden="true"></div>
+  <div class="glow" aria-hidden="true"></div>
+
+  <main class="screen" id="screen">
+    <div class="titlebar">
+      <span class="tb-dot"></span><span class="tb-dot"></span><span class="tb-dot"></span>
+      <span class="tb-title">jake@husenet: ~</span>
+    </div>
+
+    <div class="output" id="output"></div>
+
+    <form class="inputline" id="form" autocomplete="off">
+      <span class="prompt" id="prompt">jake@husenet:~$</span>
+      <span class="field">
+        <input class="cmd" id="cmd" type="text" autocomplete="off"
+               autocapitalize="off" autocorrect="off" spellcheck="false"
+               aria-label="terminal input" />
+        <span class="mirror" id="mirror" aria-hidden="true"></span>
+        <span class="cursor" id="cursor" aria-hidden="true"></span>
+      </span>
+    </form>
+  </main>
+
+  <noscript>
+    <div style="max-width:42rem;margin:3rem auto;padding:0 1.25rem;color:#ffb454;font-family:monospace;">
+      <h1>husenet</h1>
+      <ul>
+        <li>vantage - web security scanner (python): github.com/husenet/vantage</li>
+        <li>promptstrike - LLM red-teaming toolkit (python): github.com/husenet/promptstrike</li>
+        <li>github.com/husenet</li>
+      </ul>
+    </div>
+  </noscript>
+
+  <script src="assets/main.js"></script>
+</body>
+</html>
