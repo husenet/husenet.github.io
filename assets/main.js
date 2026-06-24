@@ -43,7 +43,7 @@
   var projects = [
     {
       name: "vantage",
-      lang: "python",
+      lang: "rust",
       short: "web security scanner",
       url: "github.com/husenet/vantage",
       desc: [
@@ -51,7 +51,7 @@
         "http security-header / cookie / cors / disclosure audit,",
         "csp + hsts analysis, http-method probing, dns recon, and",
         "nmap service + vulners (cve) scans. selectable by flag,",
-        "report-friendly output. python stdlib, zero dependencies."
+        "report-friendly output. single static binary, rustls tls."
       ]
     },
     {
