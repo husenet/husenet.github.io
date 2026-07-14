@@ -47,7 +47,7 @@
       short: "web security scanner",
       url: "github.com/husenet/vantage",
       desc: [
-        "web security scanner for authorized testing.",
+        "web security scanner.",
         "http security-header / cookie / cors / disclosure audit,",
         "csp + hsts analysis, http-method probing, dns recon, and",
         "nmap service + vulners (cve) scans. selectable by flag,",
@@ -72,6 +72,29 @@
     return null;
   }
 
+  /* ---- ~/posts: write-ups. the words live on medium ---- */
+  var MEDIUM = "medium.com/@husenet";
+  var posts = [
+    /* newest first. publishing = add an entry here, commit, done.
+    {
+      name: "short-slug",   <- don't reuse a project name, cat checks projects first
+      date: "2026-07-20",
+      title: "post title, lowercase",
+      hook: "one line for the listing",
+      teaser: [
+        "first few lines of the post, verbatim,",
+        "enough to make you want the rest."
+      ],
+      url: MEDIUM + "/the-slug-medium-gives-you"
+    },
+    */
+  ];
+  function findPost(n) {
+    n = (n || "").replace(/\/$/, "").toLowerCase();
+    for (var i = 0; i < posts.length; i++) if (posts[i].name === n) return posts[i];
+    return null;
+  }
+
   var banner = [
     "     ██╗ █████╗ ██╗  ██╗███████╗",
     "     ██║██╔══██╗██║ ██╔╝██╔════╝",
@@ -84,9 +107,11 @@
   var help = [
     "available commands:",
     '  <span class="kw">ls</span>            list projects',
-    '  <span class="kw">cat</span> &lt;name&gt;    show a project',
-    '  <span class="kw">open</span> &lt;name&gt;   open a project on github',
+    '  <span class="kw">posts</span>         list write-ups',
+    '  <span class="kw">cat</span> &lt;name&gt;    show a project or write-up',
+    '  <span class="kw">open</span> &lt;name&gt;   open it (github / medium)',
     '  <span class="kw">github</span>        my github profile',
+    '  <span class="kw">medium</span>        my write-ups on medium',
     '  <span class="kw">clear</span>         clear the screen',
     '  <span class="kw">help</span>          this list',
     "",
@@ -110,25 +135,53 @@
         write(name + '<span class="dim">' + p.short + "  [" + p.lang + "]</span>");
       });
     },
+    posts: function () {
+      write('<span class="dim">~/posts</span>');
+      write("");
+      if (!posts.length) {
+        write("nothing here yet. when there is, it'll be on " + link(MEDIUM) + ".", "dim");
+        return;
+      }
+      posts.forEach(function (p) {
+        write('<span class="dim">' + p.date + "</span>  " + cmdlink(esc(p.name) + "/", "cat " + p.name));
+        write('            <span class="dim">' + esc(p.hook) + "</span>");
+      });
+    },
     cat: function (a) {
+      if (!a[0]) { write("usage: cat &lt;name&gt;  (try " + cmdlink("ls", "ls") + " or " + cmdlink("posts", "posts") + ")", "err"); return; }
       var p = findProject(a[0]);
-      if (!a[0]) { write("usage: cat &lt;project&gt;  (try " + cmdlink("ls", "ls") + ")", "err"); return; }
-      if (!p) { write("cat: " + esc(a[0]) + ": no such project. " + cmdlink("ls", "ls") + " to list.", "err"); return; }
-      write('<span class="kw">' + p.name + "/</span>   [" + p.lang + "]");
-      write("");
-      writeLines(p.desc, "out");
-      write("");
-      write("  open  " + link(p.url));
+      if (p) {
+        write('<span class="kw">' + p.name + "/</span>   [" + p.lang + "]");
+        write("");
+        writeLines(p.desc, "out");
+        write("");
+        write("  open  " + link(p.url));
+        return;
+      }
+      var w = findPost(a[0]);
+      if (w) {
+        write('<span class="kw">' + esc(w.title) + '</span>   <span class="dim">[' + w.date + "]</span>");
+        write("");
+        writeLines(w.teaser.map(esc), "out");
+        write("");
+        write("  read the rest  " + link(w.url));
+        return;
+      }
+      write("cat: " + esc(a[0]) + ": no such file or directory. " + cmdlink("ls", "ls") + " or " + cmdlink("posts", "posts") + " to list.", "err");
     },
     open: function (a) {
-      var p = findProject(a[0]);
-      if (!p) { write("open: " + esc(a[0] || "") + ": no such project.", "err"); return; }
+      var p = findProject(a[0]) || findPost(a[0]);
+      if (!p) { write("open: " + esc(a[0] || "") + ": no such thing.", "err"); return; }
       window.open("https://" + p.url, "_blank", "noopener");
       write("opening " + link(p.url) + " ...");
     },
     github: function () {
       window.open("https://github.com/husenet", "_blank", "noopener");
       write("opening " + link("github.com/husenet") + " ...");
+    },
+    medium: function () {
+      window.open("https://" + MEDIUM, "_blank", "noopener");
+      write("opening " + link(MEDIUM) + " ...");
     },
     whoami: function () { write("husenet"); },
     banner: function () { write('<pre class="banner">' + esc(banner.join("\n")) + "</pre>"); },
@@ -137,7 +190,7 @@
     exit: function () { write("you can log out, but the shell stays open. (it's a website.)", "dim"); }
   };
 
-  var ALIASES = { "?": "help", "ll": "ls", "cls": "clear", "man": "help", "projects": "ls", "cd": "cat" };
+  var ALIASES = { "?": "help", "ll": "ls", "cls": "clear", "man": "help", "projects": "ls", "cd": "cat", "blog": "posts", "writeups": "posts", "articles": "posts" };
 
   function run(raw) {
     printCommand(raw);
@@ -159,6 +212,59 @@
     input.focus();
   }
 
+  /* type a command out like a person would, then run it */
+  var autoTimer = null, autoHold = null, autoCmd = null;
+  function autoCancel() {
+    if (autoTimer) clearInterval(autoTimer);
+    if (autoHold) clearTimeout(autoHold);
+    autoTimer = autoHold = null;
+    autoCmd = null;
+  }
+  /* any keypress during the animation skips it: run the command now */
+  function autoSkip() {
+    if (autoCmd === null) return false;
+    var c = autoCmd;
+    autoCancel();
+    input.value = "";
+    updateCursor();
+    run(c);
+    return true;
+  }
+  function autoType(cmdStr) {
+    autoCancel();
+    autoCmd = cmdStr;
+    var i = 0;
+    input.value = "";
+    updateCursor();
+    autoTimer = setInterval(function () {
+      i++;
+      input.value = cmdStr.slice(0, i);
+      updateCursor();
+      if (i >= cmdStr.length) {
+        clearInterval(autoTimer);
+        autoTimer = null;
+        autoHold = setTimeout(function () {
+          autoHold = null;
+          autoCmd = null;
+          input.value = "";
+          updateCursor();
+          run(cmdStr);
+        }, 250);
+      }
+    }, 45);
+  }
+
+  /* #posts or #some-name jumps straight there. this is what i link from elsewhere. */
+  function deepLink() {
+    var h;
+    try { h = decodeURIComponent((location.hash || "").replace(/^#\/?/, "")).toLowerCase(); }
+    catch (e) { return; }
+    if (!h) return;
+    if (h === "posts" || h === "blog") autoType("posts");
+    else if (findPost(h) || findProject(h)) autoType("cat " + h);
+  }
+  window.addEventListener("hashchange", deepLink);
+
   /* ---- block cursor ---- */
   function updateCursor() {
     mirror.textContent = input.value;
@@ -170,6 +276,7 @@
 
   form.addEventListener("submit", function (e) {
     e.preventDefault();
+    if (autoSkip()) { input.value = ""; updateCursor(); return; }
     var v = input.value;
     input.value = "";
     updateCursor();
@@ -177,6 +284,7 @@
   });
 
   input.addEventListener("keydown", function (e) {
+    if (autoCmd !== null) { autoSkip(); return; }
     if (e.key === "ArrowUp") {
       e.preventDefault();
       if (hidx > 0) { hidx--; input.value = history[hidx] || ""; updateCursor(); }
@@ -195,11 +303,12 @@
   function complete() {
     var v = input.value.trim();
     if (!v) return;
-    var pool = Object.keys(commands).concat(projects.map(function (p) { return p.name; }));
+    var names = projects.concat(posts).map(function (p) { return p.name; });
+    var pool = Object.keys(commands).concat(names);
     if (v.indexOf(" ") >= 0) {
       var bits = v.split(/\s+/);
       var last = bits[bits.length - 1];
-      var pm = projects.map(function (p) { return p.name; }).filter(function (n) { return n.indexOf(last) === 0; });
+      var pm = names.filter(function (n) { return n.indexOf(last) === 0; });
       if (pm.length === 1) { bits[bits.length - 1] = pm[0]; input.value = bits.join(" "); updateCursor(); }
       return;
     }
@@ -232,8 +341,13 @@
   write("");
   commands.ls();
   write("");
+  if (posts.length) {
+    write("latest write-up: " + cmdlink(esc(posts[0].title), "cat " + posts[0].name) + '  <span class="dim">[' + posts[0].date + "]</span>");
+    write("");
+  }
   write('type <span class="kw">help</span>, or click a project.');
   write("");
   input.focus();
   updateCursor();
+  setTimeout(deepLink, 400);
 })();

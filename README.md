@@ -10,9 +10,12 @@ Live: https://husenet.github.io
 
 ## Commands
 
-`ls` `cat <name>` `open <name>` `github` `whoami` `banner` `clear` `help`
+`ls` `posts` `cat <name>` `open <name>` `github` `medium` `whoami` `banner` `clear` `help`
 
 (plus a couple you'll have to find)
+
+Deep links: `/#posts` lists the write-ups, `/#some-name` opens a project
+or post directly. Handy for linking from elsewhere.
 
 ## Layout
 
