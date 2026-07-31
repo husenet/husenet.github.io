@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>jake.center</title>
+<link rel="canonical" href="https://jake.center/">
+<script>
+  // Runs before the meta refresh, so hash deep links keep working:
+  //   #posts / #blog        -> jake.center/blog
+  //   #<project-or-post>    -> jake.center/terminal#<name>  (the terminal
+  //                            still autotypes `cat <name>`, same as here)
+  (function () {
+    var h = "";
+    try { h = decodeURIComponent((location.hash || "").replace(/^#\/?/, "")).toLowerCase(); }
+    catch (e) { /* fall through to home */ }
+    var dest = "https://jake.center/";
+    if (h === "posts" || h === "blog") dest = "https://jake.center/blog";
+    else if (h) dest = "https://jake.center/terminal#" + encodeURIComponent(h);
+    location.replace(dest);
+  })();
+</script>
+<meta http-equiv="refresh" content="0; url=https://jake.center/">
+</head>
+<body>
+<noscript><p>This site has moved to <a href="https://jake.center/">jake.center</a>.</p></noscript>
+<p><a href="https://jake.center/">Continue to jake.center →</a></p>
+</body>
+</html>

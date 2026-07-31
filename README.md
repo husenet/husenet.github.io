@@ -1,30 +1,9 @@
 # husenet.github.io
 
-My site. It's an interactive terminal, so `help` and poke around.
+Redirects to [jake.center](https://jake.center), where this site now lives.
 
-Plain HTML/CSS/JS. No framework, no build step. Amber CRT theme with
-scanlines, a custom block cursor, command history (Up/Down) and Tab
-completion.
+The old terminal wasn't retired — it was ported into the new site and runs at
+[jake.center/terminal](https://jake.center/terminal), or press `~` on any page.
 
-Live: https://husenet.github.io
-
-## Commands
-
-`ls` `posts` `cat <name>` `open <name>` `github` `medium` `whoami` `banner` `clear` `help`
-
-(plus a couple you'll have to find)
-
-Deep links: `/#posts` lists the write-ups, `/#some-name` opens a project
-or post directly. Handy for linking from elsewhere.
-
-## Layout
-
-```
-index.html        markup + the terminal shell
-assets/style.css  amber CRT theme, scanlines, cursor
-assets/main.js    the command interpreter
-```
-
-## Deploy
-
-Push to `main`. GitHub Pages serves it from the repo root.
+`index.html` and `404.html` are identical: GitHub Pages serves `404.html` for
+unknown paths, so old deep links get the same hash-preserving redirect.
