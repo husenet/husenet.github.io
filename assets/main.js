@@ -72,9 +72,22 @@
     return null;
   }
 
-  /* ---- ~/posts: write-ups. the words live on medium ---- */
+  /* ---- ~/posts: write-ups. the words live on jake.center ---- */
   var MEDIUM = "medium.com/@husenet";
+  var SITE = "jake.center";
   var posts = [
+    {
+      name: "cve-2026-49950-xinference",
+      date: "2026-10-16",
+      title: "cve-2026-49950 and why upgrading xinference isn't enough",
+      hook: "unauthenticated rce in xinference's actor transport, and why the 4.0.1 fix is opt-in",
+      teaser: [
+        "I'm one of the credited reporters on GHSA-2hj6-h88x-mv4j, the Xinference",
+        "security advisory for CVE-2026-49950. It's an unauthenticated remote code",
+        "execution bug rated 9.3 (Critical) under CVSS v4."
+      ],
+      url: SITE + "/blog/cve-2026-49950-xinference"
+    },
     /* newest first. publishing = add an entry here, commit, done.
     {
       name: "short-slug",   <- don't reuse a project name, cat checks projects first
@@ -109,7 +122,8 @@
     '  <span class="kw">ls</span>            list projects',
     '  <span class="kw">posts</span>         list write-ups',
     '  <span class="kw">cat</span> &lt;name&gt;    show a project or write-up',
-    '  <span class="kw">open</span> &lt;name&gt;   open it (github / medium)',
+    '  <span class="kw">open</span> &lt;name&gt;   open it (github / jake.center)',
+    '  <span class="kw">site</span>          jake.center',
     '  <span class="kw">github</span>        my github profile',
     '  <span class="kw">medium</span>        my write-ups on medium',
     '  <span class="kw">clear</span>         clear the screen',
@@ -178,6 +192,10 @@
     github: function () {
       window.open("https://github.com/husenet", "_blank", "noopener");
       write("opening " + link("github.com/husenet") + " ...");
+    },
+    site: function () {
+      window.open("https://" + SITE, "_blank", "noopener");
+      write("opening " + link(SITE) + " ...");
     },
     medium: function () {
       window.open("https://" + MEDIUM, "_blank", "noopener");
@@ -338,6 +356,7 @@
   /* ---- boot ---- */
   write('<pre class="banner">' + esc(banner.join("\n")) + "</pre>");
   write('<span class="dim">husenet</span>');
+  write("site: " + link(SITE));
   write("");
   commands.ls();
   write("");

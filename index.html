@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; base-uri 'none'; form-action 'none'; upgrade-insecure-requests" />
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>husenet</title>
   <meta name="description" content="husenet - security tools and write-ups." />
@@ -42,12 +44,13 @@
   </main>
 
   <noscript>
-    <div style="max-width:42rem;margin:3rem auto;padding:0 1.25rem;color:#ffb454;font-family:monospace;">
+    <div class="noscript">
       <h1>husenet</h1>
       <ul>
         <li>vantage - web security scanner (rust): github.com/husenet/vantage</li>
         <li>promptstrike - LLM red-teaming toolkit (python): github.com/husenet/promptstrike</li>
-        <li>write-ups: medium.com/@husenet</li>
+        <li>site: <a href="https://jake.center">jake.center</a></li>
+        <li>write-ups: <a href="https://jake.center/blog">jake.center/blog</a> and medium.com/@husenet</li>
         <li>github.com/husenet</li>
       </ul>
     </div>

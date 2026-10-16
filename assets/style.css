@@ -134,3 +134,6 @@ a.link:hover { background: var(--amber); color: #1a1206; border-color: transpare
   .crt { animation: none; }
   .cursor { animation: none; }
 }
+
+/* no-JavaScript fallback (styled here: the CSP allows no inline styles) */
+.noscript { max-width: 42rem; margin: 3rem auto; padding: 0 1.25rem; color: #ffb454; font-family: monospace; }
